@@ -23,8 +23,7 @@ Install Cilium to cluster with strict replacement for kube-proxy:
 ```shell
 cilium install --version 1.10.3 \
     --config kube-proxy-replacement=strict \
-    --config enable-bandwidth-manager=true \
-    --config k8s-api-server="https://kind-control-plane:6443"
+    --config enable-bandwidth-manager=true
 ```
 
 ### Tuning
