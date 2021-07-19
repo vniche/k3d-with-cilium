@@ -2,15 +2,19 @@
 
 Create k3d custom image with BPF volume mount mounted:
 
-```shell
-doker build -t k3s:bpf
-```
-
 Create cluster:
 
 ```shell
 k3d cluster create --config k3d-config.yaml
 ```
+
+## Install
+
+### Custom CLI
+
+Since k3d has a particular need for a custom BPF volume mount command, i'm running on a customized CLI with [this changes](https://github.com/cilium/cilium-cli/pull/440).
+
+### Stock cluster
 
 For this cluster, i'm following the [strict kube-proxy replacement doc](https://docs.cilium.io/en/v1.10/gettingstarted/kubeproxy-free/#kubeproxy-free).
 
@@ -23,7 +27,7 @@ cilium install --version 1.10.3 \
     --config k8s-api-server="https://kind-control-plane:6443"
 ```
 
-## Tuning
+### Tuning
 
 Install tuned Cilium following this [doc](https://docs.cilium.io/en/stable/operations/performance/tuning/).
 
@@ -36,8 +40,7 @@ cilium install --version 1.10.3 \
     --config native-routing-cidr="10.244.0.0/16" \
     --config auto-direct-node-routes=true \
     --config node-port-mode=hybrid \
-    --config node-port-acceleration=native \
-    --config k8s-api-server="https://k3d-cilium-k3d-server-0:6443"
+    --config node-port-acceleration=native
 ```
 
 ## Troubleshooting
