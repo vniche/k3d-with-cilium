@@ -1,0 +1,24 @@
+# k3d configuration file, saved as e.g. /home/me/myk3dcluster.yaml
+apiVersion: k3d.io/v1alpha2 # this will change in the future as we make everything more stable
+kind: Simple # internally, we also have a Cluster config, which is not yet available externally
+name: cilium-k3d # name that you want to give to your cluster (will still be prefixed with `k3d-`)
+servers: 1 # same as `--servers 1`
+agents: 3 # same as `--agents 2`
+kubeAPI: # same as `--api-port kubernetes.k3d:6443` (where the name would resolve to 127.0.0.1)
+  host: "kubernetes.k3d" # important for the `server` setting in the kubeconfig
+  hostIP: "127.0.0.1" # where the Kubernetes API will be listening on
+  hostPort: "6443" # where the Kubernetes API listening port will be mapped to on your host system
+image: k3s:bpf # same as `--image rancher/k3s:v1.20.4-k3s1`
+options:
+  k3d: # k3d runtime settings
+    disableLoadbalancer: true # same as `--no-lb`
+  k3s: # options passed on to K3s itself
+    extraServerArgs: # additional arguments passed to the `k3s server` command; same as `--k3s-server-arg`
+      - --cluster-cidr=10.244.0.0/16
+      - --service-cidr=10.96.0.0/16
+      - --tls-san=kubernetes.k3d
+      - --flannel-backend=none
+      - --disable=servicelb
+      - --disable=traefik
+      - --disable-network-policy
+    extraAgentArgs: [] # addditional arguments passed to the `k3s agent` command; same as `--k3s-agent-arg`
